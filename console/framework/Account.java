@@ -71,4 +71,9 @@ public abstract class Account extends Subject {
     public void updateBalance(double amount){
         this.balance += amount;
     }
+
+
+    public  Account getAccount(String accountNumber){
+        return this;
+    }
 }

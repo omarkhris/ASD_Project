@@ -32,8 +32,11 @@ public class SavingsAccountDecorator extends AccountDecorator {
 
     @Override
     public void addInterest() {
-        super.addInterest();
+
         // Additional behavior specific to savings accounts
+        double ratioRate;
+            ratioRate = balance * 0.03;
+            super.updateBalance(- ratioRate);
     }
 
     @Override

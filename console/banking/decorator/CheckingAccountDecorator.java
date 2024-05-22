@@ -31,8 +31,16 @@ public class CheckingAccountDecorator extends AccountDecorator {
 
     @Override
     public void addInterest() {
-        super.addInterest();
         // Additional behavior specific to checking accounts
+        double ratioRate;
+        if (balance < 1000) {
+            ratioRate = balance * 0.015;
+            super.updateBalance(- ratioRate); }
+        else {
+            ratioRate = balance * 0.025;
+            super.updateBalance(- ratioRate);
+            }
+
     }
 
     @Override
