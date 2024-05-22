@@ -25,19 +25,25 @@ public class CreditCard extends Account {
         notify(new Transaction(new Date(), "Payment", amount));
     }
 
+    //i used the withdraw method to charge the credit card
     @Override
     public void withdraw(double amount) {
-        throw new UnsupportedOperationException("Withdraw operation is not supported for Credit Card");
-    }
-
-    public void charge(double amount) {
         balance += amount;  // Charging increases credit card balance
-        transactions.add(new Transaction(new Date(), "Charge", amount));
+        transactions.add(new Transaction(new Date(), "withdraw", amount));
         if (amount > 400) {
             customer.update(new Transaction(new Date(), "Large Charge", amount));
         }
         notify(new Transaction(new Date(), "Charge", amount));
     }
+
+//    public void charge(double amount) {
+//        balance += amount;  // Charging increases credit card balance
+//        transactions.add(new Transaction(new Date(), "Charge", amount));
+//        if (amount > 400) {
+//            customer.update(new Transaction(new Date(), "Large Charge", amount));
+//        }
+//        notify(new Transaction(new Date(), "Charge", amount));
+//    }
 
     @Override
     public void generateReport() {

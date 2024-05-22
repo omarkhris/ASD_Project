@@ -26,9 +26,14 @@ public class Customer implements Observer {
         account.detach(this);
     }
 
-    public Customer findCustomerByEmail(String email) {
-        // Implement logic to find customer by email
-        return null;
+//    public Customer findCustomerByEmail(String email) {
+//        // Implement logic to find customer by email
+//
+//        return null;
+//    }
+
+    public String getEmail() {
+        return email;
     }
 
     public void addOrUpdateCustomer(Customer customer) {
