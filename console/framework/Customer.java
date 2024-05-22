@@ -1,5 +1,8 @@
 package edu.mum.cs.cs525.labs.exercises.project.console.framework;
 
+import edu.mum.cs.cs525.labs.exercises.project.console.banking.CompanyAccount;
+import edu.mum.cs.cs525.labs.exercises.project.console.banking.PersonalAccount;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +10,9 @@ public class Customer implements Observer {
     private String name;
     private String address;
     private String email;
+
+    private Account account;
+
     private List<Account> accounts = new ArrayList<>();
     private List<Transaction> transactionHistory = new ArrayList<>();
 
@@ -15,6 +21,18 @@ public class Customer implements Observer {
         this.address = address;
         this.email = email;
     }
+
+    public void createAccount(String accountNumber, double balance, String accountType) {
+
+        if(accountType.equalsIgnoreCase("Personal")){
+            account = new PersonalAccount(accountNumber, balance, this, accountType);
+            accounts.add(account);
+        } else if(accountType.equalsIgnoreCase("Company")) {
+            account = new CompanyAccount(accountNumber, balance, this, accountType);
+        }
+
+    }
+
 
     public void addAccount(Account account) {
         accounts.add(account);

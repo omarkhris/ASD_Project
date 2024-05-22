@@ -4,10 +4,14 @@ import edu.mum.cs.cs525.labs.exercises.project.console.framework.Account;
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.InterestStrategy;
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.Transaction;
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.Customer;
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.internal.InterestCalculator;
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.internal.NotificationService;
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.internal.TransactionProcessor;
 
 import java.util.Date;
 
 public class CompanyAccount extends Account {
+
 
 
 
