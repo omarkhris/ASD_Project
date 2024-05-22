@@ -11,14 +11,15 @@ public class CompanyAccount extends Account {
 
 
 
-    public CompanyAccount(String accountNumber, double balance, Customer customer, String accountType) {
-        super(accountNumber, balance, accountType);
+    public CompanyAccount(String accountNumber, double balance, String accountType, Customer customer) {
+        super(accountNumber, balance, accountType, customer);
         super.customer = customer;
     }
 
     @Override
     public void deposit(double amount) {
-        balance += amount;
+        System.out.println("Depositing " + amount + " to CompanyAccount");
+        updateBalance(amount);
         transactions.add(new Transaction(new Date(), "Deposit", amount));
         customer.update(new Transaction(new Date(), "Company Deposit", amount));
         notify(new Transaction(new Date(), "Deposit", amount));
@@ -26,8 +27,9 @@ public class CompanyAccount extends Account {
 
     @Override
     public void withdraw(double amount) {
+        System.out.println("Withdrawing " + amount + " from CompanyAccount");
         if (balance >= amount) {
-            balance -= amount;
+            updateBalance(-amount);
             transactions.add(new Transaction(new Date(), "Withdraw", amount));
             customer.update(new Transaction(new Date(), "Company Withdrawal", amount));
             notify(new Transaction(new Date(), "Withdraw", amount));

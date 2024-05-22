@@ -13,7 +13,7 @@ public class CreditCard extends Account {
     private double minimumPaymentPercentage;
 
     public CreditCard(String accountNumber, double balance, double minimumPaymentPercentage, Customer customer, String accountType) {
-        super(accountNumber, balance, accountType);
+        super(accountNumber, balance, accountType, customer);
         super.customer = customer;
         this.minimumPaymentPercentage = minimumPaymentPercentage;
     }

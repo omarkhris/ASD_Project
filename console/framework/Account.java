@@ -14,11 +14,18 @@ public abstract class Account extends Subject {
 
     AccountBehavior accountBehavior;
 
-    public Account(String accountNumber, double balance, String accountType) {
+    public Account(String accountNumber, double balance, String accountType, Customer customer) {
         this.accountNumber = accountNumber;
         this.balance = balance;
         //this.interestStrategy = interestStrategy;
         this.accountType = accountType;
+        this.customer = customer;
+    }
+
+
+    public Account(String accountNumber, double balance){
+        this.accountNumber = accountNumber;
+        this.balance = balance;
     }
 
     public abstract void deposit(double amount);
@@ -55,5 +62,13 @@ public abstract class Account extends Subject {
 
     public String getAccountNumber() {
         return accountNumber;
+    }
+
+    public Customer getCustomer(){
+        return this.customer;
+    }
+
+    public void updateBalance(double amount){
+        this.balance += amount;
     }
 }

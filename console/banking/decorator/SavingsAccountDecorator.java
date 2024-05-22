@@ -1,5 +1,6 @@
-package edu.mum.cs.cs525.labs.exercises.project.console.banking;
+package edu.mum.cs.cs525.labs.exercises.project.console.banking.decorator;
 
+import edu.mum.cs.cs525.labs.exercises.project.console.banking.decorator.AccountDecorator;
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.Account;
 
 public class SavingsAccountDecorator extends AccountDecorator {
@@ -15,13 +16,17 @@ public class SavingsAccountDecorator extends AccountDecorator {
 
     @Override
     public void deposit(double amount) {
-        super.deposit(amount);
+        super.updateBalance(amount);
         // Additional behavior specific to savings accounts
     }
 
     @Override
     public void withdraw(double amount) {
-        super.withdraw(amount);
+        if(amount > super.getBalance()){
+            System.out.println("Insufficient Account Balance");
+        }
+        else
+        super.updateBalance(-amount);
         // Additional behavior specific to savings accounts
     }
 
