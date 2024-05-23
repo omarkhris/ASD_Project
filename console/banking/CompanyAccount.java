@@ -6,13 +6,14 @@ import edu.mum.cs.cs525.labs.exercises.project.console.framework.Transaction;
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.Customer;
 
 import java.util.Date;
+import java.util.HashMap;
 
 public class CompanyAccount extends Account {
 
 
 
-    public CompanyAccount(String accountNumber, double balance, String accountType, Customer customer) {
-        super(accountNumber, balance, accountType, customer);
+    public CompanyAccount(String accountNumber, double balance, String accountType, Customer customer, HashMap<String, Object> additionalInfo) {
+        super(accountNumber, balance, accountType, customer, additionalInfo);
         super.customer = customer;
     }
 

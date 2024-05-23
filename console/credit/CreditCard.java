@@ -5,24 +5,26 @@ import edu.mum.cs.cs525.labs.exercises.project.console.framework.InterestStrateg
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.Transaction;
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.Customer;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
 
 public class CreditCard extends Account {
-    private double minimumPaymentPercentage;
+    private MinimumPaymentStrategy minimumPaymentStrategy;
+    private InterestStrategy interestStrategy;
+    private final double lineOfCredit;
 
-    public CreditCard(String accountNumber, double balance, double minimumPaymentPercentage, Customer customer, String accountType) {
-        super(accountNumber, balance, accountType, customer);
-        super.customer = customer;
-        this.minimumPaymentPercentage = minimumPaymentPercentage;
+
+    public CreditCard(String accountNumber, double lineOfCredit, Customer customer, String accountType, HashMap<String, Object> additionalInfo) {
+        super(accountNumber, lineOfCredit, accountType, customer, additionalInfo);
+        this.lineOfCredit = lineOfCredit;
+        this.additionalInfo = additionalInfo;
     }
 
     @Override
     public void deposit(double amount) {
-        balance -= amount;  // Depositing reduces credit card balance (paying off)
-        transactions.add(new Transaction(new Date(), "Payment", amount));
-        notify(new Transaction(new Date(), "Payment", amount));
+        updateBalance(- amount);  // Depositing reduces credit card balance (paying off)
+        transactions.add(new Transaction(new Date(), "Deposit", amount));
+        notify(new Transaction(new Date(), "Deposit", amount));
     }
 
     @Override
@@ -30,12 +32,24 @@ public class CreditCard extends Account {
         throw new UnsupportedOperationException("Withdraw operation is not supported for Credit Card");
     }
 
+    @Override
+    public void addInterest() {
+        double interest = interestStrategy.calculateInterest(balance);
+        updateBalance(- interest);
+        transactions.add(new Transaction(new Date(), "Interest", interest));
+        notify(new Transaction(new Date(), "Interest", interest));
+    }
+
     public void charge(double amount) {
-        balance += amount;  // Charging increases credit card balance
-        transactions.add(new Transaction(new Date(), "Charge", amount));
-        if (amount > 400) {
-            customer.update(new Transaction(new Date(), "Large Charge", amount));
+        if (balance > amount) {
+            updateBalance(+ amount);
+
+            if (amount > 400) {
+                customer.update(new Transaction(new Date(), "Large Charge", amount));
+            }
         }
+
+        customer.update(new Transaction(new Date(), "Charge", amount));
         notify(new Transaction(new Date(), "Charge", amount));
     }
 
@@ -44,12 +58,28 @@ public class CreditCard extends Account {
         new CreditCardReportGenerator(transactions).generateReport();
     }
 
+    public double getLineOfCredit() {
+        return lineOfCredit;
+    }
+
+    public double calculateMinimumPayment() {
+        return minimumPaymentStrategy.calculateMinimumPayment(lineOfCredit, balance);
+    }
+
+    public void setMinimumPaymentStrategy(MinimumPaymentStrategy minimumPaymentStrategy) {
+        this.minimumPaymentStrategy = minimumPaymentStrategy;
+    }
+
+    public void setInterestStrategy(InterestStrategy interestStrategy) {
+        this.interestStrategy = interestStrategy;
+    }
+
     public void generateMonthlyBillingReport() {
         double previousBalance = balance;
         double totalCharges = transactions.stream().filter(t -> t.getName().equals("Charge")).mapToDouble(Transaction::getAmount).sum();
         double totalCredits = transactions.stream().filter(t -> t.getName().equals("Payment")).mapToDouble(Transaction::getAmount).sum();
         double newBalance = previousBalance - totalCredits + totalCharges + interestStrategy.calculateInterest(previousBalance - totalCredits);
-        double totalDue = minimumPaymentPercentage * newBalance;
+        double totalDue = 0 * newBalance; // Todo: minimumPaymentPercentage is not defined
         System.out.println("Monthly Billing Report");
         System.out.println("----------------------");
         System.out.println("Previous Balance: " + previousBalance);

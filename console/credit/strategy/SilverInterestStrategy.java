@@ -1,4 +1,4 @@
-package edu.mum.cs.cs525.labs.exercises.project.console.credit;
+package edu.mum.cs.cs525.labs.exercises.project.console.credit.strategy;
 
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.InterestStrategy;
 
