@@ -3,36 +3,41 @@ package edu.mum.cs.cs525.labs.exercises.project.console.framework;
 import edu.mum.cs.cs525.labs.exercises.project.console.banking.CompanyAccount;
 import edu.mum.cs.cs525.labs.exercises.project.console.banking.PersonalAccount;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Customer implements Observer {
+public class Customer implements Observer, Serializable {
+    private static final long serialVersionUID = 1L;
     private String name;
-    private String address;
     private String email;
+    private String birthDate;
 
-    private Account account;
+    private Address address;
 
     private List<Account> accounts = new ArrayList<>();
     private List<Transaction> transactionHistory = new ArrayList<>();
 
-    public Customer(String name, String address, String email) {
+
+
+    public Customer(String name, Address address, String email, String birthDate) {
         this.name = name;
         this.address = address;
         this.email = email;
+        this.birthDate = birthDate;
     }
 
-    public void createAccount(String accountNumber, double balance, String accountType) {
-
-        if(accountType.equalsIgnoreCase("Personal")){
-            account = new PersonalAccount(accountNumber, balance, this, accountType);
-            accounts.add(account);
-        } else if(accountType.equalsIgnoreCase("Company")) {
-            account = new CompanyAccount(accountNumber, balance, this, accountType);
-        }
-
+    public String getBirthDate() {
+        return birthDate;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
 
     public void addAccount(Account account) {
         accounts.add(account);
@@ -54,8 +59,24 @@ public class Customer implements Observer {
         return email;
     }
 
-    public void addOrUpdateCustomer(Customer customer) {
-        // Implement logic to add or update customer
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }
+
+    public void setTransactionHistory(List<Transaction> transactionHistory) {
+        this.transactionHistory = transactionHistory;
     }
 
     @Override
@@ -72,5 +93,8 @@ public class Customer implements Observer {
 
     public String getName() {
         return name;
+    }
+    public void setName(String name) {
+          this.name = name;
     }
 }

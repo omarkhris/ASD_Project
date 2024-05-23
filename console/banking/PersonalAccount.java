@@ -17,22 +17,22 @@ public class PersonalAccount extends Account {
     @Override
     public void deposit(double amount) {
         balance += amount;
-        transactions.add(new Transaction(new Date(), "Deposit", amount));
+        transactions.add(new Transaction(new Date(), "Deposit", amount, accountNumber ));
         if (amount > 500) {
-            customer.update(new Transaction(new Date(), "Large Deposit", amount));
+            customer.update(new Transaction(new Date(), "Large Deposit", amount,  accountNumber));
         }
-        notify(new Transaction(new Date(), "Deposit", amount));
+        notify(new Transaction(new Date(), "Deposit", amount, accountNumber));
     }
 
     @Override
     public void withdraw(double amount) {
         if (balance >= amount) {
             balance -= amount;
-            transactions.add(new Transaction(new Date(), "Withdraw", amount));
+            transactions.add(new Transaction(new Date(), "Withdraw", amount, accountNumber));
             if (amount > 500 || balance < 0) {
-                customer.update(new Transaction(new Date(), "Large Withdrawal or Overdraft", amount));
+                customer.update(new Transaction(new Date(), "Large Withdrawal or Overdraft", amount, accountNumber));
             }
-            notify(new Transaction(new Date(), "Withdraw", amount));
+            notify(new Transaction(new Date(), "Withdraw", amount, accountNumber));
         } else {
             System.out.println("Insufficient funds");
         }

@@ -6,9 +6,11 @@ import edu.mum.cs.cs525.labs.exercises.project.console.framework.internal.Intere
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.internal.NotificationService;
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.internal.TransactionProcessor;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Framework {
+public class Framework  implements Serializable {
+    private static final long serialVersionUID = 1L;
     private TransactionProcessor transactionProcessor;
     private InterestCalculator interestCalculator;
     private NotificationService notificationService;

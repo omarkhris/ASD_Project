@@ -23,18 +23,18 @@ public class CompanyAccount extends Account {
     @Override
     public void deposit(double amount) {
         balance += amount;
-        transactions.add(new Transaction(new Date(), "Deposit", amount));
-        customer.update(new Transaction(new Date(), "Company Deposit", amount));
-        notify(new Transaction(new Date(), "Deposit", amount));
+        transactions.add(new Transaction(new Date(), "Deposit", amount, accountNumber));
+        customer.update(new Transaction(new Date(), "Company Deposit", amount, accountNumber));
+        notify(new Transaction(new Date(), "Deposit", amount, accountNumber));
     }
 
     @Override
     public void withdraw(double amount) {
         if (balance >= amount) {
             balance -= amount;
-            transactions.add(new Transaction(new Date(), "Withdraw", amount));
-            customer.update(new Transaction(new Date(), "Company Withdrawal", amount));
-            notify(new Transaction(new Date(), "Withdraw", amount));
+            transactions.add(new Transaction(new Date(), "Withdraw", amount, accountNumber));
+            customer.update(new Transaction(new Date(), "Company Withdrawal", amount, accountNumber));
+            notify(new Transaction(new Date(), "Withdraw", amount, accountNumber));
         } else {
             System.out.println("Insufficient funds");
         }
