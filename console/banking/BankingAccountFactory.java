@@ -1,5 +1,7 @@
 package edu.mum.cs.cs525.labs.exercises.project.console.banking;
 
+import edu.mum.cs.cs525.labs.exercises.project.console.banking.decorator.CheckingAccountDecorator;
+import edu.mum.cs.cs525.labs.exercises.project.console.banking.decorator.SavingsAccountDecorator;
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.Account;
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.AccountFactory;
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.Customer;
@@ -8,14 +10,14 @@ public class BankingAccountFactory implements AccountFactory {
 
     @Override
     public Account createPersonalAccount(String accountNumber, double balance, Customer customer, String accountType) {
-        Account personalAccount = new PersonalAccount(accountNumber, balance, customer, accountType);
+        Account personalAccount = new PersonalAccount(accountNumber, balance, accountType, customer);
         personalAccount.setCustomer(customer);
         return createAccount(personalAccount, accountType);
     }
 
     @Override
     public Account createCompanyAccount(String accountNumber, double balance, Customer customer, String accountType) {
-        Account companyAccount = new CompanyAccount(accountNumber, balance, customer, accountType);
+        Account companyAccount = new CompanyAccount(accountNumber, balance, accountType, customer);
         return createAccount(companyAccount, accountType);
     }
 

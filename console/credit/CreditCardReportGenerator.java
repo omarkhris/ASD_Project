@@ -24,11 +24,13 @@ public class CreditCardReportGenerator extends ReportGenerator {
     }
 
     @Override
-    protected void printReport() {
+    protected List<Transaction> printReport() {
         // Print report logic specific to credit card
         System.out.println("Credit Card Report");
         for (Transaction transaction : transactions) {
             transaction.getDetails();
         }
+
+        return this.transactions;
     }
 }
