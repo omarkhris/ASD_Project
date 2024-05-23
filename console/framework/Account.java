@@ -1,27 +1,22 @@
 package edu.mum.cs.cs525.labs.exercises.project.console.framework;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public abstract class Account extends Subject {
     protected String accountNumber;
     protected double balance;
-    protected InterestStrategy interestStrategy;
     protected List<Transaction> transactions = new ArrayList<>();
     protected Customer customer;
     protected String accountType;
+    protected Map<String, Object> additionalInfo = new HashMap<>();
 
-    AccountBehavior accountBehavior;
-
-    public Account(String accountNumber, double balance, String accountType, Customer customer) {
+    public Account(String accountNumber, double balance, String accountType, Customer customer, HashMap<String, Object> additionalInfo) {
         this.accountNumber = accountNumber;
         this.balance = balance;
-        //this.interestStrategy = interestStrategy;
         this.accountType = accountType;
         this.customer = customer;
+        this.additionalInfo = additionalInfo;
     }
-
 
     public Account(String accountNumber, double balance){
         this.accountNumber = accountNumber;
@@ -32,10 +27,9 @@ public abstract class Account extends Subject {
     public abstract void withdraw(double amount);
 
     public void addInterest() {
-        double interest = interestStrategy.calculateInterest(balance);
-        balance += interest;
-        transactions.add(new Transaction(new Date(), "Interest", interest));
-        notify(new Transaction(new Date(), "Interest", interest));
+        balance += 0;
+        transactions.add(new Transaction(new Date(), "Interest", 0, balance));
+        notify(new Transaction(new Date(), "Interest", 0, balance));
     }
 
     public List<Transaction> getTransactionHistory() {
@@ -46,10 +40,6 @@ public abstract class Account extends Subject {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
-    }
-
-    public void setAccountBehavior(AccountBehavior accountBehavior) {
-        this.accountBehavior = accountBehavior;
     }
 
     public String getAccountType() {
@@ -72,8 +62,16 @@ public abstract class Account extends Subject {
         this.balance += amount;
     }
 
-
     public  Account getAccount(String accountNumber){
         return this;
+    }
+
+    public HashMap<String, Object> getAdditionalInfo() {
+        return (HashMap<String, Object>) additionalInfo;
+    }
+
+
+    public void setAdditionalInfo(String key, Object object){
+        additionalInfo.put(key,object);
     }
 }

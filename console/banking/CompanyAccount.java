@@ -6,13 +6,14 @@ import edu.mum.cs.cs525.labs.exercises.project.console.framework.Transaction;
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.Customer;
 
 import java.util.Date;
+import java.util.HashMap;
 
 public class CompanyAccount extends Account {
 
 
 
-    public CompanyAccount(String accountNumber, double balance, String accountType, Customer customer) {
-        super(accountNumber, balance, accountType, customer);
+    public CompanyAccount(String accountNumber, double balance, String accountType, Customer customer, HashMap<String, Object> additionalInfo) {
+        super(accountNumber, balance, accountType, customer, additionalInfo);
         super.customer = customer;
     }
 
@@ -20,9 +21,9 @@ public class CompanyAccount extends Account {
     public void deposit(double amount) {
         System.out.println("Depositing " + amount + " to CompanyAccount");
         updateBalance(amount);
-        transactions.add(new Transaction(new Date(), "Deposit", amount));
-        customer.update(new Transaction(new Date(), "Company Deposit", amount));
-        notify(new Transaction(new Date(), "Deposit", amount));
+        transactions.add(new Transaction(new Date(), "Deposit", amount, super.getBalance()));
+        customer.update(new Transaction(new Date(), "Company Deposit", amount, super.getBalance()));
+        notify(new Transaction(new Date(), "Deposit", amount, super.getBalance()));
     }
 
     @Override
@@ -30,9 +31,9 @@ public class CompanyAccount extends Account {
         System.out.println("Withdrawing " + amount + " from CompanyAccount");
         if (balance >= amount) {
             updateBalance(-amount);
-            transactions.add(new Transaction(new Date(), "Withdraw", amount));
-            customer.update(new Transaction(new Date(), "Company Withdrawal", amount));
-            notify(new Transaction(new Date(), "Withdraw", amount));
+            transactions.add(new Transaction(new Date(), "Withdraw", amount, super.getBalance()));
+            customer.update(new Transaction(new Date(), "Company Withdrawal", amount, super.getBalance()));
+            notify(new Transaction(new Date(), "Withdraw", amount, super.getBalance()));
         } else {
             System.out.println("Insufficient funds");
         }

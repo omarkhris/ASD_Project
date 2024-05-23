@@ -1,22 +1,31 @@
 package edu.mum.cs.cs525.labs.exercises.project.console.framework;
 
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.DTO.BankDTO;
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.model.Address;
+
 public class Application {
     public static void main(String[] args) {
         AccountService accountService = new AccountServiceImpl();
         // create 2 accounts;
-        accountService.createPersonalAccount("1263862", "Frank Brown", "Hampton 3814 - 3rd ST", "www.me@gmai.com");
-        accountService.createPersonalAccount("4253892", "John Doe", "Hampton 3814 - 3rd ST", "www.me@gmai.com");
+        Address address = new Address("3814 - 3rd ST", "Hampton", "234423", "Chicago");
+
+        BankDTO bankDTO = new BankDTO("1263862","Frank Brown", address, "Ch", "www.me@gmai.com", "Personal", 500, "May.16", "23");
+        Account a = accountService.createBankingAccount(bankDTO);
+//        accountService.createPersonalAccount("1263862", "Frank Brown", "Hampton 3814 - 3rd ST", "www.me@gmai.com");
+//        accountService.createPersonalAccount("4253892", "John Doe", "Hampton 3814 - 3rd ST", "www.me@gmai.com");
         // use account 1;
         accountService.deposit("1263862", 240);
 
         accountService.deposit("1263862", 529);
         accountService.withdraw("1263862", 230);
         // use account 2;
-        accountService.deposit("4253892", 12450);
-        accountService.transferFunds("4253892", "1263862", 100, "payment of invoice 10232");
+//        accountService.deposit("4253892", 12450);
+//        accountService.transferFunds("4253892", "1263862", 100, "payment of invoice 10232");
 //        // Custom Func
 //        accountService.addInterest();
 //        // show balances
+
+        a.generateReport();
 //
         for (Account account : accountService.getAllAccounts()) {
             Customer customer = account.getCustomer();

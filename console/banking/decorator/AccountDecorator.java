@@ -9,7 +9,7 @@ public abstract class AccountDecorator extends Account {
     protected Account decoratedAccount;
 
     public AccountDecorator(Account decoratedAccount) {
-        super(decoratedAccount.getAccountNumber(), decoratedAccount.getBalance(), decoratedAccount.getAccountType(), decoratedAccount.getCustomer());
+        super(decoratedAccount.getAccountNumber(), decoratedAccount.getBalance(), decoratedAccount.getAccountType(), decoratedAccount.getCustomer(), decoratedAccount.getAdditionalInfo());
         this.decoratedAccount = decoratedAccount;
     }
 
@@ -19,8 +19,8 @@ public abstract class AccountDecorator extends Account {
     public void deposit(double amount) {
         System.out.println("Depositing " + amount + " to decorated account");
         decoratedAccount.updateBalance(amount);
-        transactions.add(new Transaction(new Date(), "WithDraw", amount));
-        notify(new Transaction(new Date(), "Withdraw", amount));
+        transactions.add(new Transaction(new Date(), "WithDraw", amount, super.getBalance()));
+        notify(new Transaction(new Date(), "Withdraw", amount, super.getBalance()));
     }
 
     @Override
@@ -28,8 +28,8 @@ public abstract class AccountDecorator extends Account {
 
         decoratedAccount.updateBalance(-amount);
 
-        transactions.add(new Transaction(new Date(), "WithDraw", -amount));
-        notify(new Transaction(new Date(), "Withdraw", -amount));
+        transactions.add(new Transaction(new Date(), "WithDraw", -amount, super.getBalance()));
+        notify(new Transaction(new Date(), "Withdraw", -amount, super.getBalance()));
     }
 
     @Override

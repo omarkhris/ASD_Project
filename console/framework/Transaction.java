@@ -7,14 +7,17 @@ public class Transaction {
     private String name;
     private double amount;
 
-    public Transaction(Date date, String name, double amount) {
+    private double currentBalance;
+
+    public Transaction(Date date, String name, double amount, double currentBalance) {
         this.date = date;
         this.name = name;
         this.amount = amount;
+        this.currentBalance = currentBalance;
     }
 
     public void getDetails() {
-        System.out.println("Date: " + date + ", Name: " + name + ", Amount: " + amount);
+        System.out.println("Date: " + date + ", Transaction: " + name + ", Amount: " + amount + ", currentBalance: " + currentBalance);
     }
 
     public Date getDate() {

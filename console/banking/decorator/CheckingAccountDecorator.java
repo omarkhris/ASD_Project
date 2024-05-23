@@ -21,8 +21,8 @@ public class CheckingAccountDecorator extends AccountDecorator {
     @Override
     public void deposit(double amount){
         super.updateBalance(amount);
-        transactions.add(new Transaction(new Date(), "Deposit", amount));
-        notify(new Transaction(new Date(), "Deposit", amount));
+        transactions.add(new Transaction(new Date(), "Deposit", amount, super.getBalance()));
+        notify(new Transaction(new Date(), "Deposit", amount, super.getBalance()));
         // Additional behavior specific to checking accounts
     }
 
@@ -32,8 +32,8 @@ public class CheckingAccountDecorator extends AccountDecorator {
             System.out.println("Account Balance  Insufficient ");;
         }else {
             super.updateBalance(-amount);
-            transactions.add(new Transaction(new Date(), "WithDraw", -amount));
-            notify(new Transaction(new Date(), "Withdraw", -amount));
+            transactions.add(new Transaction(new Date(), "WithDraw", -amount, super.getBalance()));
+            notify(new Transaction(new Date(), "Withdraw", -amount, super.getBalance()));
         }
         // Additional behavior specific to checking accounts
     }

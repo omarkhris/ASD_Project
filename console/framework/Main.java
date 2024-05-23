@@ -4,6 +4,17 @@ import edu.mum.cs.cs525.labs.exercises.project.console.banking.decorator.Checkin
 import edu.mum.cs.cs525.labs.exercises.project.console.banking.decorator.SavingsAccountDecorator;
 import edu.mum.cs.cs525.labs.exercises.project.console.banking.factoryCreation.CompanyAccountFactory;
 import edu.mum.cs.cs525.labs.exercises.project.console.banking.factoryCreation.PersonalAccountFactory;
+import edu.mum.cs.cs525.labs.exercises.project.console.credit.CreditCard;
+import edu.mum.cs.cs525.labs.exercises.project.console.credit.factoryCreation.BronzeCreditCardFactory;
+import edu.mum.cs.cs525.labs.exercises.project.console.credit.factoryCreation.GoldCreditCardFactory;
+import edu.mum.cs.cs525.labs.exercises.project.console.credit.factoryCreation.SilverCreditCardFactory;
+import edu.mum.cs.cs525.labs.exercises.project.console.credit.strategy.GoldInterestStrategy;
+import edu.mum.cs.cs525.labs.exercises.project.console.credit.strategy.SilverInterestStrategy;
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.model.Address;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -71,17 +82,26 @@ public class Main {
         FactoryAccount personalAccountFactory = new PersonalAccountFactory();
         FactoryAccount companyAccountFactory = new CompanyAccountFactory();
 
-        Customer personalCustomer = new Customer("John Doe", "Hampton 3814 - 3rd ST", "www.me@gmai.com");
-        Customer companyCustomer = new Customer("John Doe's company", "Hampton 3814 - 3rd ST", "www.me@gmai.com");
+        Address address = new Address("3814 - 3rd ST", "Hampton", "234423", "Chicago");
+
+
+        Customer personalCustomer = new Customer("John Doe", address, "www.me@gmai.com");
+        Customer companyCustomer = new Customer("John Doe's company", address, "www.me@gmai.com");
+
+        HashMap<String, Object> personalInfo = new HashMap<>();
+        personalInfo.put("BirthDate", "12/25/1990");
 
         // Create a personal account and decorate it as a checking account
-        Account personalAccount = personalAccountFactory.createAccount("P123", 1000, "Personal", personalCustomer);
+        Account personalAccount = personalAccountFactory.createAccount("P123", 1000, "Personal", personalCustomer, personalInfo);
         Account checkingPersonalAccount = new CheckingAccountDecorator(personalAccount);
 //        checkingPersonalAccount.addInterest();
         System.out.println("MEHFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF" + checkingPersonalAccount.getBalance());
 
+        HashMap<String, Object> companyInfo = new HashMap<>();
+        companyInfo.put("NumbOfMember", "10");
+
         // Create a company account and decorate it as a savings account
-        Account companyAccount = companyAccountFactory.createAccount("C456", 5000, "Company", companyCustomer);
+        Account companyAccount = companyAccountFactory.createAccount("C456", 5000, "Company", companyCustomer, companyInfo);
         Account savingsCompanyAccount = new SavingsAccountDecorator(companyAccount);
 
         // Perform operations on the decorated accounts
@@ -106,15 +126,44 @@ public class Main {
 //        System.out.println("Savings Company Account Balance: " + savingsCompanyAccount.getBalance());
 //        System.out.println(savingsCompanyAccount.getBalance());
 
-        System.out.println("***********************************************");
+        HashMap<String, Object> creditCardInfo = new HashMap<>();
+//        creditCardInfo.put("ccNumber", "1234-5678-9101-1121");
+//        creditCardInfo.put("expiryDate", "12/25");
+        // Credit card
+        FactoryAccount goldCreditCardFactory = new GoldCreditCardFactory();
+        FactoryAccount silverCreditCardFactory = new SilverCreditCardFactory();
+        FactoryAccount bronzeCreditCardFactory = new BronzeCreditCardFactory();
 
-        personalCustomer.addAccount(savingsCompanyAccount);
-        personalCustomer.addAccount(checkingPersonalAccount);
 
-        for(Account account : personalCustomer.getAccounts()){
-            System.out.println(account.getBalance());
-            account.generateReport();
-        }
+        Account goldCreditCard = goldCreditCardFactory.createAccount("G123", 1000, "Gold", new Customer("John Doe",address , "email"), creditCardInfo);
+
+        goldCreditCard.setAdditionalInfo("ccNumber", "1234-5678-9101-1121");
+        goldCreditCard.setAdditionalInfo("expiryDate", "12/25");
+
+        System.out.println("Gold Credit Card Balance: " + goldCreditCard.getBalance());
+        System.out.println("Gold Credit Card Type: " + goldCreditCard.getAdditionalInfo());
+        goldCreditCard.addInterest();
+        goldCreditCard.addInterest();
+        goldCreditCard.addInterest();
+        goldCreditCard.generateReport();
+
+
+
+
+
+//        for(Account account : personalCustomer.getAccounts()){
+//            System.out.println(account.getBalance());
+//            account.generateReport();
+//        List<Transaction> trans = goldCreditCard.getTransactionHistory();
+//        for(Transaction tr : trans ){
+//            System.out.println("Transaction: " + tr.getName() + " " + tr.getAmount());
+//        }
+
+        //Command depositCommand = new DepositCommand(goldCreditCard, 500);
+//        Command chargeCommand = new ChargeCommand((CreditCard) goldCreditCard, 1000);
+//        chargeCommand.execute();
+//        chargeCommand.unexecute();
+
 
 
     }

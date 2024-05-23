@@ -1,16 +1,18 @@
 package edu.mum.cs.cs525.labs.exercises.project.console.framework;
 
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.model.Address;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Customer implements Observer {
     private String name;
-    private String address;
+    private Address address;
     private String email;
     private List<Account> accounts = new ArrayList<>();
     private List<Transaction> transactionHistory = new ArrayList<>();
 
-    public Customer(String name, String address, String email) {
+    public Customer(String name, Address address, String email) {
         this.name = name;
         this.address = address;
         this.email = email;
@@ -54,5 +56,33 @@ public class Customer implements Observer {
 
     public List<Account> getAccounts(){
         return this.accounts;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }
+
+    public void setTransactionHistory(List<Transaction> transactionHistory) {
+        this.transactionHistory = transactionHistory;
     }
 }
