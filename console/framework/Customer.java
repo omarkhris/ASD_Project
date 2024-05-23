@@ -1,16 +1,18 @@
 package edu.mum.cs.cs525.labs.exercises.project.console.framework;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Customer implements Observer {
+public class Customer implements Observer, Serializable {
+    private static final long serialVersionUID = 1L;
     private String name;
-    private String address;
+    private Address address;
     private String email;
     private List<Account> accounts = new ArrayList<>();
     private List<Transaction> transactionHistory = new ArrayList<>();
 
-    public Customer(String name, String address, String email) {
+    public Customer(String name, Address address, String email) {
         this.name = name;
         this.address = address;
         this.email = email;
@@ -49,6 +51,10 @@ public class Customer implements Observer {
 
     public String getName() {
         return name;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
 

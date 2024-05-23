@@ -10,6 +10,10 @@ import edu.mum.cs.cs525.labs.exercises.project.console.credit.factoryCreation.Go
 import edu.mum.cs.cs525.labs.exercises.project.console.credit.factoryCreation.SilverCreditCardFactory;
 import edu.mum.cs.cs525.labs.exercises.project.console.credit.strategy.GoldInterestStrategy;
 import edu.mum.cs.cs525.labs.exercises.project.console.credit.strategy.SilverInterestStrategy;
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.internal.InterestCalculator;
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.internal.NotificationService;
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.internal.TransactionProcessor;
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.persistence.FilePersistenceFacade;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,6 +21,9 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
+        TransactionProcessor transactionProcessor = new TransactionProcessor();
+        InterestCalculator interestCalculator = new InterestCalculator();
+        NotificationService notificationService = new NotificationService();
         // Create CreditCard accounts with different interest strategies
 //        Customer customer = new Customer("John Doe", "1234 Main St", "we");
 //        Customer customer1 = new Customer("John D2oe", "1234 Main St", "we");
@@ -77,18 +84,19 @@ public class Main {
 
 
         System.out.println("***************************************************************************************");
+        Address address = new Address("1234 Main St", "Fairfield", "IA", "52557");
 
         FactoryAccount personalAccountFactory = new PersonalAccountFactory();
         FactoryAccount companyAccountFactory = new CompanyAccountFactory();
 
-        Customer personalCustomer = new Customer("John Doe", "Hampton 3814 - 3rd ST", "www.me@gmai.com");
-        Customer companyCustomer = new Customer("John Doe's company", "Hampton 3814 - 3rd ST", "www.me@gmai.com");
+        Customer personalCustomer = new Customer("John Doe", address, "www.me@gmai.com");
+        Customer companyCustomer = new Customer("John Doe's company", address, "www.me@gmai.com");
 
         HashMap<String, Object> personalInfo = new HashMap<>();
         personalInfo.put("BirthDate", "12/25/1990");
 
         // Create a personal account and decorate it as a checking account
-        Account personalAccount = personalAccountFactory.createAccount("P123", 1000, "Personal", personalCustomer, personalInfo);
+        Account personalAccount = personalAccountFactory.createAccount("P123", 1000, "Personal", personalCustomer, transactionProcessor, interestCalculator, notificationService, personalInfo);
         Account checkingPersonalAccount = new CheckingAccountDecorator(personalAccount);
         checkingPersonalAccount.addInterest();
         System.out.println("MEHFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF" + checkingPersonalAccount.getBalance());
@@ -97,7 +105,7 @@ public class Main {
         companyInfo.put("NumbOfMember", "10");
 
         // Create a company account and decorate it as a savings account
-        Account companyAccount = companyAccountFactory.createAccount("C456", 5000, "Company", companyCustomer, companyInfo);
+        Account companyAccount = companyAccountFactory.createAccount("C456", 5000, "Company", companyCustomer, transactionProcessor, interestCalculator, notificationService, companyInfo);
         Account savingsCompanyAccount = new SavingsAccountDecorator(companyAccount);
 
         // Perform operations on the decorated accounts
@@ -126,11 +134,28 @@ public class Main {
         creditCardInfo.put("ccNumber", "1234-5678-9101-1121");
         creditCardInfo.put("expiryDate", "12/25");
         // Credit card
+
+       List<Transaction> testTransaction;
+
         FactoryAccount goldCreditCardFactory = new GoldCreditCardFactory();
         FactoryAccount silverCreditCardFactory = new SilverCreditCardFactory();
         FactoryAccount bronzeCreditCardFactory = new BronzeCreditCardFactory();
 
-        Account goldCreditCard = goldCreditCardFactory.createAccount("G123", 1000, "Gold", new Customer("John Doe", "Hampton 3814 - 3rd ST", "email"), creditCardInfo);
+
+        Account goldCreditCard = goldCreditCardFactory.createAccount("G124", 1000, "Gold", new Customer("John Doe", address, "email"), transactionProcessor, interestCalculator, notificationService, creditCardInfo);
+        goldCreditCard.addInterest();
+        //goldCreditCard.deposit(100);
+        //goldCreditCard.deposit(200);
+        //goldCreditCard.deposit(300);
+        PersistenceFacade persistenceFacade= new FilePersistenceFacade();
+        persistenceFacade.saveAccount(goldCreditCard);
+        System.out.println("==========testing persistence");
+        testTransaction=persistenceFacade.loadTransactions("G123");
+        for(Transaction tr : testTransaction ){
+            System.out.println("Transaction: " + tr.getName() + " " + tr.getAmount()+ tr.getAccountNumber());
+        }
+
+
 
         System.out.println("Gold Credit Card Balance: " + goldCreditCard.getBalance());
         System.out.println("Gold Credit Card Type: " + savingsCompanyAccount.getAdditionalInfo());

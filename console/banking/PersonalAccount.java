@@ -3,25 +3,44 @@ package edu.mum.cs.cs525.labs.exercises.project.console.banking;
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.Account;
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.Transaction;
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.Customer;
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.internal.InterestCalculator;
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.internal.NotificationService;
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.internal.TransactionProcessor;
 
 import java.util.Date;
 import java.util.HashMap;
 
 public class PersonalAccount extends Account {
 
-    public PersonalAccount(String accountNumber, double balance, String accountType, Customer customer, HashMap<String, Object> additionalInfo) {
-        super(accountNumber, balance, accountType, customer, additionalInfo);
+    public PersonalAccount(String accountNumber,
+                           double balance,
+                           String accountType,
+                           Customer customer,
+                           TransactionProcessor transactionProcessor,
+                           InterestCalculator interestCalculator,
+                           NotificationService notificationService,
+                           HashMap<String, Object> additionalInfo) {
+        super(accountNumber, balance, accountType, customer, transactionProcessor, interestCalculator, notificationService, additionalInfo);
     }
 
     @Override
     public void deposit(double amount) {
         System.out.println("Depositing " + amount + " to PersonalAccount");
         updateBalance(amount);
-        transactions.add(new Transaction(new Date(), "Deposit", amount));
+
         if (amount > 500) {
-            customer.update(new Transaction(new Date(), "Large Deposit", amount));
+            framework.sendNotification(customer.getEmail(), "Large deposit of " + amount + " to account " + accountNumber);
         }
-        notify(new Transaction(new Date(), "Deposit", amount));
+
+        Transaction transaction = new Transaction(new Date(), "deposit", amount, accountNumber);
+        transactions.add(transaction);
+        customer.update(transaction);
+        notify(transaction);
+
+        //Facade
+        framework.processTransactions(transactions);
+        persistenceFacade.saveAccount(this);
+        persistenceFacade.saveTransaction(transaction);
     }
 
     @Override
@@ -29,11 +48,21 @@ public class PersonalAccount extends Account {
         System.out.println("Withdrawing " + amount + " from PersonalAccount");
         if (balance >= amount) {
             updateBalance(-amount);
-            transactions.add(new Transaction(new Date(), "Withdraw", amount));
+
             if (amount > 500 || balance < 0) {
-                customer.update(new Transaction(new Date(), "Large Withdrawal or Overdraft", amount));
+                framework.sendNotification(customer.getEmail(), "Large withdrawal of " + amount + " from account " + accountNumber);
             }
-            notify(new Transaction(new Date(), "Withdraw", amount));
+
+            Transaction transaction = new Transaction(new Date(), "withdraw", amount, accountNumber);
+            transactions.add(transaction);
+            customer.update(transaction);
+            notify(transaction);
+
+            //Facade
+            framework.processTransactions(transactions);
+            persistenceFacade.saveAccount(this);
+            persistenceFacade.saveTransaction(transaction);
+
         } else {
             System.out.println("Insufficient funds");
         }

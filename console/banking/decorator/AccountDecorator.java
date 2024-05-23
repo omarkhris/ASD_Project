@@ -6,7 +6,15 @@ public abstract class AccountDecorator extends Account {
     protected Account decoratedAccount;
 
     public AccountDecorator(Account decoratedAccount) {
-        super(decoratedAccount.getAccountNumber(), decoratedAccount.getBalance(), decoratedAccount.getAccountType(), decoratedAccount.getCustomer(), decoratedAccount.getAdditionalInfo());
+        super(decoratedAccount.getAccountNumber(),
+                decoratedAccount.getBalance(),
+                decoratedAccount.getAccountType(),
+                decoratedAccount.getCustomer(),
+                decoratedAccount.getTransactionProcessor(),
+                decoratedAccount.getInterestCalculator(),
+                decoratedAccount.getNotificationService(),
+                decoratedAccount.getAdditionalInfo()
+        );
         this.decoratedAccount = decoratedAccount;
     }
 
