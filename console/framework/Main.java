@@ -106,5 +106,15 @@ public class Main {
 //        System.out.println("Savings Company Account Balance: " + savingsCompanyAccount.getBalance());
         System.out.println(savingsCompanyAccount.getBalance());
 
+        System.out.println("***********************************************");
+
+        personalCustomer.addAccount(savingsCompanyAccount);
+        personalCustomer.addAccount(checkingPersonalAccount);
+
+        for(Account account : personalCustomer.getAccounts()){
+            System.out.println(account.getBalance());
+        }
+
+
     }
 }

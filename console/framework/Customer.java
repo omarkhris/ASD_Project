@@ -16,7 +16,7 @@ public class Customer implements Observer {
         this.email = email;
     }
 
-    public void addAccount(Account account) {
+    public void addAccount(Account account){
         accounts.add(account);
         account.attach(this);
     }
@@ -49,5 +49,10 @@ public class Customer implements Observer {
 
     public String getName() {
         return name;
+    }
+
+
+    public List<Account> getAccounts(){
+        return this.accounts;
     }
 }
