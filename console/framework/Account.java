@@ -51,6 +51,10 @@ public abstract class Account extends Subject implements Serializable {
         return customer;
     }
 
+    public PersistenceFacade getPersistenceFacade() {
+        return persistenceFacade;
+    }
+
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }

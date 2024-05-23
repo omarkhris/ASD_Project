@@ -6,6 +6,7 @@ import edu.mum.cs.cs525.labs.exercises.project.console.framework.internal.Intere
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.internal.NotificationService;
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.internal.TransactionProcessor;
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.persistence.FilePersistenceFacade;
+import edu.mum.cs.cs525.labs.exercises.project.console.retail.*;
 
 import java.util.List;
 
@@ -139,6 +140,54 @@ public class Main {
         // Generate and print monthly billing report
         broneCreditCard.generateMonthlyBillingReport(bronzeInterestStrategy);
         System.out.println("====");
+
+
+        // Create inventory
+        Inventory inventory = new Inventory();
+
+        // Create and add products
+        Product book = new Product("B001", "Java Programming", 49.99, 10);
+        Product notebook = new Product("N002", "Notebook", 2.99, 50);
+        inventory.addProduct(book);
+        inventory.addProduct(notebook);
+
+        // Print all products in inventory
+        System.out.println("Products in Inventory:");
+        inventory.getAllProducts().forEach((id, product) -> {
+            System.out.println("ID: " + product.getProductId() + ", Name: " + product.getName() + ", Price: " + product.getPrice() + ", Quantity: " + product.getQuantity());
+        });
+
+        // Create a retail customer
+        Address retailAddress = new Address("456 Market St", "RetailCity", "RC123", "52557");
+        RetailCustomer retailCustomer = new RetailCustomer("John Doe", retailAddress, "john@example.com", "1985-06-15");
+
+        // Create billing account for the retail customer
+        BillingAccount billingAccount = new BillingAccount("789456", 1000, "Retail Account");
+
+        billingAccount.getBalance();
+        // Create an order for the retail customer
+        Order order = new Order("ORD001", retailCustomer, billingAccount);
+        order.addProduct(book);
+        order.addProduct(notebook);
+        retailCustomer.addOrder(order);
+
+        // Process the order
+        order.processOrder();
+
+        // Save customer and account data
+        //FilePersistenceFacade persistenceFacade = new FilePersistenceFacade();
+        persistenceFacade.saveCustomer(retailCustomer);
+        persistenceFacade.saveAccount(billingAccount);
+
+        // Load customer and account data
+        RetailCustomer loadedRetailCustomer = (RetailCustomer) persistenceFacade.loadCustomer("john@example.com");
+        Account loadedAccount = persistenceFacade.loadAccount("789456");
+
+        // Print loaded data
+        System.out.println("Loaded Customer: " + loadedRetailCustomer.getName());
+        System.out.println("Loaded Account Balance: " + loadedAccount.getBalance());
+
+
 
     }
 }

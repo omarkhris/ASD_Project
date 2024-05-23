@@ -13,7 +13,7 @@ public class Customer implements Observer, Serializable {
     private String email;
     private String birthDate;
 
-    private Address address;
+    protected Address address;
 
     private List<Account> accounts = new ArrayList<>();
     private List<Transaction> transactionHistory = new ArrayList<>();
