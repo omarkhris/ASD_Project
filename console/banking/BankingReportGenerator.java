@@ -24,11 +24,13 @@ public class BankingReportGenerator extends ReportGenerator {
     }
 
     @Override
-    protected void printReport() {
-        // Print report logic specific to banking
-        System.out.println("Banking Report");
+    protected List<Transaction> printReport() {
+        System.out.println("Banking Report " + transactions.size());
+
         for (Transaction transaction : transactions) {
             transaction.getDetails();
         }
+
+        return this.transactions;
     }
 }

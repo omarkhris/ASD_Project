@@ -77,7 +77,7 @@ public class Main {
         // Create a personal account and decorate it as a checking account
         Account personalAccount = personalAccountFactory.createAccount("P123", 1000, "Personal", personalCustomer);
         Account checkingPersonalAccount = new CheckingAccountDecorator(personalAccount);
-        checkingPersonalAccount.addInterest();
+//        checkingPersonalAccount.addInterest();
         System.out.println("MEHFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF" + checkingPersonalAccount.getBalance());
 
         // Create a company account and decorate it as a savings account
@@ -88,23 +88,23 @@ public class Main {
         checkingPersonalAccount.deposit(500);
         checkingPersonalAccount.withdraw(2000);
         System.out.println(checkingPersonalAccount.getBalance());
-//        checkingPersonalAccount.generateReport();
+        checkingPersonalAccount.generateReport();
 
 
-        savingsCompanyAccount.deposit(1000);
+//        savingsCompanyAccount.deposit(1000);
 //        savingsCompanyAccount.addInterest();
 //        savingsCompanyAccount.generateReport();
-        savingsCompanyAccount.withdraw(3000);
-        savingsCompanyAccount.deposit(5000);
-        savingsCompanyAccount.addInterest();
-        System.out.println(savingsCompanyAccount.getBalance());
+//        savingsCompanyAccount.withdraw(3000);
+//        savingsCompanyAccount.deposit(5000);
+//        savingsCompanyAccount.addInterest();
+//        System.out.println(savingsCompanyAccount.getBalance());
         System.out.println("***********************************************");
-        savingsCompanyAccount.withdraw(9000);
+//        savingsCompanyAccount.withdraw(9000);
 
         // Check balances
         System.out.println("Checking Personal Account Balance: " + checkingPersonalAccount.getBalance() + " vvv  ");
 //        System.out.println("Savings Company Account Balance: " + savingsCompanyAccount.getBalance());
-        System.out.println(savingsCompanyAccount.getBalance());
+//        System.out.println(savingsCompanyAccount.getBalance());
 
         System.out.println("***********************************************");
 
@@ -113,6 +113,7 @@ public class Main {
 
         for(Account account : personalCustomer.getAccounts()){
             System.out.println(account.getBalance());
+            account.generateReport();
         }
 
 
