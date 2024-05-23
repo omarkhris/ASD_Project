@@ -14,7 +14,7 @@ public class ChargeCommand implements Command {
     @Override
     public void execute() {
         if (account instanceof CreditCard) {
-            ((CreditCard) account).charge(amount);
+            ((CreditCard) account).withdraw(amount);
         }
     }
 

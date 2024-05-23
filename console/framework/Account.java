@@ -37,6 +37,10 @@ public abstract class Account extends Subject {
 
     public abstract void generateReport();
 
+    public Customer getCustomer() {
+        return customer;
+    }
+
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }

@@ -42,4 +42,19 @@ public class PersonalAccount extends Account {
     public void generateReport() {
         new BankingReportGenerator(transactions).generateReport();
     }
+
+    public void generateMonthlyBillingReport(InterestStrategy interestStrategy) {
+        if (!transactions.isEmpty()) {
+            double previousBalance = balance;
+            double totalCharges = transactions.stream().filter(t -> t.getName().equalsIgnoreCase("Withdraw")).mapToDouble(Transaction::getAmount).sum();
+            double totalCredits = transactions.stream().filter(t -> t.getName().equals("Deposit")).mapToDouble(Transaction::getAmount).sum();
+            double newBalance = previousBalance - totalCredits + totalCharges + interestStrategy.calculateInterest(previousBalance - totalCredits);
+            System.out.println("Monthly Billing Report");
+            System.out.println("----------------------");
+            System.out.println("Previous Balance: " + previousBalance);
+            System.out.println("Total Charges: " + totalCharges);
+            System.out.println("Total Credits: " + totalCredits);
+            System.out.println("New Balance: " + newBalance);
+        }
+    }
 }
