@@ -1,5 +1,7 @@
 package edu.mum.cs.cs525.labs.exercises.project.console.framework;
 
+import java.util.List;
+
 public abstract class ReportGenerator {
 
     public final void generateReport() {
@@ -10,5 +12,5 @@ public abstract class ReportGenerator {
 
     protected abstract void fetchData();
     protected abstract void formatData();
-    protected abstract void printReport();
+    protected abstract List<Transaction> printReport();
 }
