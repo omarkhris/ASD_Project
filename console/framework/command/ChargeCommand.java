@@ -1,6 +1,7 @@
-package edu.mum.cs.cs525.labs.exercises.project.console.framework;
+package edu.mum.cs.cs525.labs.exercises.project.console.framework.command;
 
 import edu.mum.cs.cs525.labs.exercises.project.console.credit.CreditCard;
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.Account;
 
 public class ChargeCommand implements Command {
     private Account account;

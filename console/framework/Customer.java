@@ -2,10 +2,14 @@ package edu.mum.cs.cs525.labs.exercises.project.console.framework;
 
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.model.Address;
 
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.observer.Observer;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Customer implements Observer {
+public class Customer implements Observer, Serializable {
+    private static final long serialVersionUID = 1L;
     private String name;
     private Address address;
     private String email;
@@ -53,6 +57,10 @@ public class Customer implements Observer {
         return name;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
 
     public List<Account> getAccounts(){
         return this.accounts;
@@ -68,10 +76,6 @@ public class Customer implements Observer {
 
     public void setAddress(Address address) {
         this.address = address;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public void setEmail(String email) {

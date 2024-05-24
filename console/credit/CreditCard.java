@@ -1,22 +1,31 @@
 package edu.mum.cs.cs525.labs.exercises.project.console.credit;
 
 import edu.mum.cs.cs525.labs.exercises.project.console.banking.BankingReportGenerator;
-import edu.mum.cs.cs525.labs.exercises.project.console.framework.Account;
-import edu.mum.cs.cs525.labs.exercises.project.console.framework.InterestStrategy;
-import edu.mum.cs.cs525.labs.exercises.project.console.framework.Transaction;
-import edu.mum.cs.cs525.labs.exercises.project.console.framework.Customer;
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.*;
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.internal.InterestCalculator;
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.internal.NotificationService;
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.internal.TransactionProcessor;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
-public class CreditCard extends Account {
+public class CreditCard extends Account implements Serializable {
+    private static final long serialVersionUID = 1L;
     private MinimumPaymentStrategy minimumPaymentStrategy;
     private InterestStrategy interestStrategy;
     private final double lineOfCredit;
 
-
-    public CreditCard(String accountNumber, double lineOfCredit, Customer customer, String accountType, HashMap<String, Object> additionalInfo) {
-        super(accountNumber, lineOfCredit, accountType, customer, additionalInfo);
+    public CreditCard(String accountNumber,
+                      double lineOfCredit,
+                      Customer customer,
+                      String accountType,
+                      TransactionProcessor transactionProcessor,
+                      InterestCalculator interestCalculator,
+                      NotificationService notificationService,
+                      HashMap<String, Object> additionalInfo) {
+        super(accountNumber, lineOfCredit, accountType, customer, transactionProcessor, interestCalculator, notificationService, additionalInfo);
         this.lineOfCredit = lineOfCredit;
         this.additionalInfo = additionalInfo;
     }
@@ -24,8 +33,15 @@ public class CreditCard extends Account {
     @Override
     public void deposit(double amount) {
         updateBalance(- amount);  // Depositing reduces credit card balance (paying off)
-        transactions.add(new Transaction(new Date(), "Deposit", amount, super.getBalance()));
-        notify(new Transaction(new Date(), "Deposit", amount, super.getBalance()));
+        Transaction transaction = new Transaction(new Date(), "deposit", amount, super.getBalance(), accountNumber);
+        transactions.add(transaction);
+
+        notify(transaction);
+
+        //Facade
+        framework.processTransactions(transactions);
+        persistenceFacade.saveAccount(this);
+        persistenceFacade.saveTransaction(transaction);
     }
 
     @Override
@@ -35,10 +51,17 @@ public class CreditCard extends Account {
 
     @Override
     public void addInterest() {
-        double interest = interestStrategy.calculateInterest(balance);
+        double interest = framework.calculateInterest(balance, interestStrategy);
         updateBalance(- interest);
-        transactions.add(new Transaction(new Date(), "Interest", interest, super.getBalance()));
-        notify(new Transaction(new Date(), "Interest", interest, super.getBalance()));
+
+        Transaction transaction = new Transaction(new Date(), "Interest", 0, super.getBalance(), accountNumber);
+        transactions.add(transaction);
+        notify(transaction);
+
+        //Facade
+        framework.processTransactions(transactions);
+        persistenceFacade.saveAccount(this);
+        persistenceFacade.saveTransaction(transaction);
     }
 
     public void charge(double amount) {
@@ -46,20 +69,24 @@ public class CreditCard extends Account {
             updateBalance(+ amount);
 
             if (amount > 400) {
-                customer.update(new Transaction(new Date(), "Large Charge", amount, super.getBalance()));
+                framework.sendNotification(customer.getEmail(), "Charge over $400 detected on your account");
             }
         }
 
-        customer.update(new Transaction(new Date(), "Charge", amount, super.getBalance()));
-        notify(new Transaction(new Date(), "Charge", amount, super.getBalance()));
+        Transaction transaction = new Transaction(new Date(), "charge", amount, super.getBalance(), accountNumber);
+        customer.update(transaction);
+        notify(transaction);
+
+        //Facade
+        transactions.add(transaction);
+        framework.processTransactions(transactions);
+        persistenceFacade.saveAccount(this);
+        persistenceFacade.saveTransaction(transaction);
     }
 
     @Override
-    public void generateReport() {
-
-        new CreditCardReportGenerator(transactions).generateReport();
-        BankingReportGenerator bkGReport = new BankingReportGenerator(transactions);
-        bkGReport.generateReport();
+    public Map<String, Object> generateReport() {
+        return new CreditCardReportGenerator(transactions, accountNumber).generateReport();
     }
 
     public double getLineOfCredit() {

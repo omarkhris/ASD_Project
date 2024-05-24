@@ -1,4 +1,7 @@
-package edu.mum.cs.cs525.labs.exercises.project.console.framework;
+package edu.mum.cs.cs525.labs.exercises.project.console.framework.observer;
+
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.Transaction;
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.observer.Observer;
 
 import java.util.ArrayList;
 import java.util.List;
