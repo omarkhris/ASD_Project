@@ -2,6 +2,7 @@ package edu.mum.cs.cs525.labs.exercises.project.console.banking.decorator;
 
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.Account;
 
+import java.nio.file.FileSystemNotFoundException;
 import java.util.Map;
 
 public class SavingsAccountDecorator extends AccountDecorator {
@@ -25,6 +26,7 @@ public class SavingsAccountDecorator extends AccountDecorator {
     public void withdraw(double amount) {
         if(amount > super.getBalance()){
             System.out.println("Insufficient Account Balance");
+            throw new FileSystemNotFoundException("Insufficient Account Balance");
         }
         else
         super.updateBalance(-amount);

@@ -129,12 +129,27 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public void transferFunds(String fromAccountNumber, String toAccountNumber, double amount, String description) {
-//        Account from
-//        Account = accountDAO.loadAccount(fromAccountNumber);
+//        Account fromAccount = accountDAO.loadAccount(fromAccountNumber);
 //        Account toAccount = accountDAO.loadAccount(toAccountNumber);
 //        fromAccount.transferFunds(toAccount, amount, description);
 //        accountDAO.updateAccount(fromAccount);
 //        accountcountDAO.updateAccount(toAccount);
+    }
+
+    @Override
+    public void generateAddInterests(Customer customer) {
+
+
+        for(Account account : this.getAllAccounts()) {
+            if(account.getCustomer().getName().equals(customer.getName())){
+                account.addInterest();
+            }
+        }
+
+
+        for(Account account : customer.getAccounts()){
+            account.addInterest();
+        }
     }
 
     @Override

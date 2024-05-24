@@ -16,4 +16,6 @@ public interface AccountService {
     void charge(String accountNumber, double amount);
 //    Account createCompanyAccount(String accountNumber, String customerName, String address, String email);
 //    //Account createCard(String cardNumber, String customerName, String address, String email);
+
+    void generateAddInterests(Customer customer);
 }
