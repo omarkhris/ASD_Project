@@ -9,6 +9,8 @@ import edu.mum.cs.cs525.labs.exercises.project.console.credit.factoryCreation.Go
 import edu.mum.cs.cs525.labs.exercises.project.console.credit.factoryCreation.SilverCreditCardFactory;
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.DTO.BankDTO;
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.DTO.CardDTO;
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.command.ChargeCommand;
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.command.Command;
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.internal.InterestCalculator;
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.internal.NotificationService;
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.internal.TransactionProcessor;
@@ -107,12 +109,10 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public void deposit(String accountNumber, double amount) throws FileSystemNotFoundException{
-
         Account account = accountDAO.loadAccount(accountNumber);
 
         if(account != null) {
             account.deposit(amount);
-
             accountDAO.updateAccount(account);
         }
         else throw new FileSystemNotFoundException("Can't make a Deposit !!! No Such Account Founded");
@@ -120,6 +120,7 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public void withdraw(String accountNumber, double amount) {
+        System.out.println(accountNumber);
         Account account = accountDAO.loadAccount(accountNumber);
         if(account != null) {
             account.withdraw(amount);
@@ -128,11 +129,23 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public void transferFunds(String fromAccountNumber, String toAccountNumber, double amount, String description) {
-//        Account fromAccount = accountDAO.loadAccount(fromAccountNumber);
+//        Account from
+//        Account = accountDAO.loadAccount(fromAccountNumber);
 //        Account toAccount = accountDAO.loadAccount(toAccountNumber);
 //        fromAccount.transferFunds(toAccount, amount, description);
 //        accountDAO.updateAccount(fromAccount);
 //        accountcountDAO.updateAccount(toAccount);
+    }
+
+    @Override
+    public void charge(String accountNumber, double amount) {
+        Account account = accountDAO.loadAccount(accountNumber);
+        if(account != null) {
+            System.out.println(accountNumber);
+            Command cmd = new ChargeCommand(account, amount);
+            account.setBalance(account.getBalance() + amount);
+            cmd.execute();
+        }else throw new FileSystemNotFoundException("Can't make a charge !!! No Such Account Founded");
     }
 
 //    @Override

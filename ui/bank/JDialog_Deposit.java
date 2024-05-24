@@ -1,14 +1,20 @@
 package edu.mum.cs.cs525.labs.exercises.project.ui.bank;
-import java.awt.*;
+
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.Customer;
+
 import javax.swing.*;
+import java.awt.*;
+import java.nio.file.FileSystemNotFoundException;
 
-public class JDialog_Deposit extends javax.swing.JDialog
+import static java.lang.Double.parseDouble;
+
+public class JDialog_Deposit extends JDialog
 {
-    
 
-    private BankFrm parentframe;
-    private String accnr;
-    
+
+	private BankFrm parentframe;
+	private String accnr;
+
 	public JDialog_Deposit(BankFrm parent, String aaccnr)
 	{
 		super(parent);
@@ -27,11 +33,11 @@ public class JDialog_Deposit extends javax.swing.JDialog
 		setVisible(false);
 		JLabel1.setText("Acc Nr");
 		getContentPane().add(JLabel1);
-		JLabel1.setForeground(java.awt.Color.black);
+		JLabel1.setForeground(Color.black);
 		JLabel1.setBounds(12,12,48,24);
 		JLabel2.setText("Amount");
 		getContentPane().add(JLabel2);
-		JLabel2.setForeground(java.awt.Color.black);
+		JLabel2.setForeground(Color.black);
 		JLabel2.setBounds(12,48,48,24);
 		JTextField_NAME.setEditable(false);
 		getContentPane().add(JTextField_NAME);
@@ -47,8 +53,8 @@ public class JDialog_Deposit extends javax.swing.JDialog
 		getContentPane().add(JTextField_Deposit);
 		JTextField_Deposit.setBounds(84,48,144,24);
 		//}}
-	    JTextField_NAME.setText(accnr);
-	    
+		JTextField_NAME.setText(accnr);
+
 		//{{REGISTER_LISTENERS
 		SymAction lSymAction = new SymAction();
 		JButton_OK.addActionListener(lSymAction);
@@ -59,12 +65,12 @@ public class JDialog_Deposit extends javax.swing.JDialog
 
 
 	//{{DECLARE_CONTROLS
-	javax.swing.JLabel JLabel1 = new javax.swing.JLabel();
-	javax.swing.JLabel JLabel2 = new javax.swing.JLabel();
-	javax.swing.JTextField JTextField_NAME = new javax.swing.JTextField();
-	javax.swing.JButton JButton_OK = new javax.swing.JButton();
-	javax.swing.JButton JButton_Cancel = new javax.swing.JButton();
-	javax.swing.JTextField JTextField_Deposit = new javax.swing.JTextField();
+	JLabel JLabel1 = new JLabel();
+	JLabel JLabel2 = new JLabel();
+	JTextField JTextField_NAME = new JTextField();
+	JButton JButton_OK = new JButton();
+	JButton JButton_Cancel = new JButton();
+	JTextField JTextField_Deposit = new JTextField();
 	//}}
 
 
@@ -82,8 +88,27 @@ public class JDialog_Deposit extends javax.swing.JDialog
 
 	void JButtonOK_actionPerformed(java.awt.event.ActionEvent event)
 	{
-        parentframe.amountDeposit=JTextField_Deposit.getText();
-        dispose();
+		double amount = parseDouble(JTextField_Deposit.getText());
+		if(amount>0) {
+			try {
+				parentframe.getBankService().deposit(accnr, amount);
+				for (Customer customer:parentframe.getCustomers()){
+					if(customer.getAccounts().get(0).getAccountNumber().equals(accnr)) {
+						parentframe.currentBalance=customer.getAccounts().get(0).getBalance();
+					}
+				}
+				dispose();
+			}catch (FileSystemNotFoundException e){
+				parentframe.currentBalance = 0;
+				JButton JButton_Withdraw = new JButton();
+				JOptionPane.showMessageDialog(JButton_Withdraw, e.getMessage(), "Warning: Account Not Found", JOptionPane.WARNING_MESSAGE);
+
+			}
+		}else {
+			JButton JButton_Withdraw = new JButton();
+			JOptionPane.showMessageDialog(JButton_Withdraw, " You  can't enter negative number" , "Invalid", JOptionPane.WARNING_MESSAGE);
+
+		}
 	}
 
 	void JButtonCalcel_actionPerformed(java.awt.event.ActionEvent event)

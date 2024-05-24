@@ -115,6 +115,11 @@ public abstract class Account extends Subject implements Serializable {
         additionalInfo.put(key,object);
     }
 
+    public void setBalance(double balance) {
+        this.balance = balance;
+
+    }
+
     public InterestCalculator getInterestCalculator() {
         return interestCalculator;
     }

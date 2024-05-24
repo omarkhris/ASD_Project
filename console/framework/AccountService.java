@@ -13,6 +13,7 @@ public interface AccountService {
     void deposit(String accountNumber, double amount);
     void withdraw(String accountNumber, double amount);
     void transferFunds(String fromAccountNumber, String toAccountNumber, double amount, String description);
+    void charge(String accountNumber, double amount);
 //    Account createCompanyAccount(String accountNumber, String customerName, String address, String email);
 //    //Account createCard(String cardNumber, String customerName, String address, String email);
 }
