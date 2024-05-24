@@ -7,6 +7,8 @@ import edu.mum.cs.cs525.labs.exercises.project.console.framework.Transaction;
 
 import java.util.Date;
 
+import java.util.Map;
+
 public class CheckingAccountDecorator extends AccountDecorator {
     public CheckingAccountDecorator(Account decoratedAccount) {
             super(decoratedAccount);
@@ -21,9 +23,15 @@ public class CheckingAccountDecorator extends AccountDecorator {
     @Override
     public void deposit(double amount){
         super.updateBalance(amount);
-        transactions.add(new Transaction(new Date(), "Deposit", amount, super.getBalance()));
-        notify(new Transaction(new Date(), "Deposit", amount, super.getBalance()));
-        // Additional behavior specific to checking accounts
+        Transaction transaction = new Transaction(new Date(), "deposit", amount, super.getBalance(), accountNumber);
+        customer.update(transaction);
+        notify(transaction);
+
+        //Facade
+        transactions.add(transaction);
+        framework.processTransactions(transactions);
+        persistenceFacade.saveAccount(this);
+        persistenceFacade.saveTransaction(transaction);
     }
 
     @Override
@@ -32,8 +40,12 @@ public class CheckingAccountDecorator extends AccountDecorator {
             System.out.println("Account Balance  Insufficient ");;
         }else {
             super.updateBalance(-amount);
-            transactions.add(new Transaction(new Date(), "WithDraw", -amount, super.getBalance()));
-            notify(new Transaction(new Date(), "Withdraw", -amount, super.getBalance()));
+            Transaction transaction = new Transaction(new Date(), "withdraw", amount, super.getBalance(), accountNumber);
+            //Facade
+            transactions.add(transaction);
+            framework.processTransactions(transactions);
+            persistenceFacade.saveAccount(this);
+            persistenceFacade.saveTransaction(transaction);
         }
         // Additional behavior specific to checking accounts
     }
@@ -53,11 +65,8 @@ public class CheckingAccountDecorator extends AccountDecorator {
     }
 
     @Override
-    public void generateReport() {
-        getDecoratorDescription();
-        // Additional behavior specific to checking accounts
-        BankingReportGenerator bk = new BankingReportGenerator(transactions);
-        bk.generateReport();
+    public Map<String, Object> generateReport() {
+        return null;
     }
 
 

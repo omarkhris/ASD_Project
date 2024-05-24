@@ -9,6 +9,9 @@ import edu.mum.cs.cs525.labs.exercises.project.console.credit.factoryCreation.Go
 import edu.mum.cs.cs525.labs.exercises.project.console.credit.factoryCreation.SilverCreditCardFactory;
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.DTO.BankDTO;
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.DTO.CardDTO;
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.internal.InterestCalculator;
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.internal.NotificationService;
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.internal.TransactionProcessor;
 
 import java.nio.file.FileSystemNotFoundException;
 import java.util.Collection;
@@ -18,8 +21,16 @@ import java.util.Optional;
 public class AccountServiceImpl implements AccountService{
     private AccountDAO accountDAO;
 
+    private TransactionProcessor transactionProcessor;
+    private InterestCalculator interestCalculator;
+    private NotificationService notificationService;
+
+
     public AccountServiceImpl() {
         accountDAO = new AccountDAOImpl();
+        this.transactionProcessor = new TransactionProcessor();
+        this.interestCalculator = new InterestCalculator();
+        this.notificationService = new NotificationService();
     }
     //        String accountNumber, String customerName, String address, String email
     public Account createBankingAccount(BankDTO bankDTO) {
@@ -31,11 +42,11 @@ public class AccountServiceImpl implements AccountService{
         Customer customer = new Customer(bankDTO.getClientName(), bankDTO.getAddress(),bankDTO.getEmail());
         if(bankDTO.getClientType().equals("Personal")){
             factoryAccount = new PersonalAccountFactory();
-            bankAccount = factoryAccount.createAccount(bankDTO.getAccountnr(),bankDTO.getCurrentBalance(),bankDTO.getAccountType(),customer, new HashMap<>());
+            bankAccount = factoryAccount.createAccount(bankDTO.getAccountnr(),bankDTO.getCurrentBalance(),bankDTO.getAccountType(),customer, this.transactionProcessor, this.interestCalculator, this.notificationService, new HashMap<>());
 
         }else if(bankDTO.getClientType().equals("Company")){
             factoryAccount = new CompanyAccountFactory();
-            bankAccount = factoryAccount.createAccount(bankDTO.getAccountnr(),bankDTO.getCurrentBalance(),bankDTO.getAccountType(),customer, new HashMap<>());
+            bankAccount = factoryAccount.createAccount(bankDTO.getAccountnr(),bankDTO.getCurrentBalance(),bankDTO.getAccountType(),customer, this.transactionProcessor, this.interestCalculator, this.notificationService, new HashMap<>());
         }
 
         if (bankDTO.getAccountType().equals("Ch")) {
@@ -61,15 +72,15 @@ public class AccountServiceImpl implements AccountService{
         Customer customer = new Customer(bankDTO.getClientName(), bankDTO.getAddress(),bankDTO.getEmail());
         if(bankDTO.getAccountType().equals("Bronze")){
             factoryAccount = new BronzeCreditCardFactory();
-            creditCardAccount = factoryAccount.createAccount(bankDTO.getCcnumber(),bankDTO.getCreditCardLimit(),bankDTO.getAccountType(),customer, new HashMap<>());
+            creditCardAccount = factoryAccount.createAccount(bankDTO.getCcnumber(),bankDTO.getCreditCardLimit(),bankDTO.getAccountType(),customer, this.transactionProcessor, this.interestCalculator, this.notificationService, new HashMap<>());
 
         }else if(bankDTO.getAccountType().equals("Gold")){
             factoryAccount = new GoldCreditCardFactory();
-            creditCardAccount = factoryAccount.createAccount(bankDTO.getCcnumber(),bankDTO.getCreditCardLimit(),bankDTO.getAccountType(),customer, new HashMap<>());
+            creditCardAccount = factoryAccount.createAccount(bankDTO.getCcnumber(),bankDTO.getCreditCardLimit(),bankDTO.getAccountType(),customer, this.transactionProcessor, this.interestCalculator, this.notificationService, new HashMap<>());
         }
         else if(bankDTO.getAccountType().equals("Silver")){
             factoryAccount = new SilverCreditCardFactory();
-            creditCardAccount = factoryAccount.createAccount(bankDTO.getCcnumber(),bankDTO.getCreditCardLimit(),bankDTO.getAccountType(),customer, new HashMap<>());
+            creditCardAccount = factoryAccount.createAccount(bankDTO.getCcnumber(),bankDTO.getCreditCardLimit(),bankDTO.getAccountType(),customer, this.transactionProcessor, this.interestCalculator, this.notificationService, new HashMap<>());
         }
 
         creditCardAccount.setAdditionalInfo("ccNumber", bankDTO.getCcnumber());

@@ -1,5 +1,7 @@
 package edu.mum.cs.cs525.labs.exercises.project.console.framework;
 
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.command.Command;
+
 import java.util.ArrayList;
 import java.util.List;
 

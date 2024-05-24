@@ -9,7 +9,15 @@ public abstract class AccountDecorator extends Account {
     protected Account decoratedAccount;
 
     public AccountDecorator(Account decoratedAccount) {
-        super(decoratedAccount.getAccountNumber(), decoratedAccount.getBalance(), decoratedAccount.getAccountType(), decoratedAccount.getCustomer(), decoratedAccount.getAdditionalInfo());
+        super(decoratedAccount.getAccountNumber(),
+                decoratedAccount.getBalance(),
+                decoratedAccount.getAccountType(),
+                decoratedAccount.getCustomer(),
+                decoratedAccount.getTransactionProcessor(),
+                decoratedAccount.getInterestCalculator(),
+                decoratedAccount.getNotificationService(),
+                decoratedAccount.getAdditionalInfo()
+        );
         this.decoratedAccount = decoratedAccount;
     }
 
@@ -19,8 +27,16 @@ public abstract class AccountDecorator extends Account {
     public void deposit(double amount) {
         System.out.println("Depositing " + amount + " to decorated account");
         decoratedAccount.updateBalance(amount);
-        transactions.add(new Transaction(new Date(), "WithDraw", amount, super.getBalance()));
-        notify(new Transaction(new Date(), "Withdraw", amount, super.getBalance()));
+
+        Transaction transaction = new Transaction(new Date(), "withdraw", -amount, super.getBalance(), accountNumber);
+        transactions.add(transaction);
+        customer.update(transaction);
+        notify(transaction);
+
+        //Facade
+        framework.processTransactions(transactions);
+        persistenceFacade.saveAccount(this);
+        persistenceFacade.saveTransaction(transaction);
     }
 
     @Override
@@ -28,8 +44,15 @@ public abstract class AccountDecorator extends Account {
 
         decoratedAccount.updateBalance(-amount);
 
-        transactions.add(new Transaction(new Date(), "WithDraw", -amount, super.getBalance()));
-        notify(new Transaction(new Date(), "Withdraw", -amount, super.getBalance()));
+        Transaction transaction = new Transaction(new Date(), "withdraw", -amount, super.getBalance(), accountNumber);
+        transactions.add(transaction);
+        customer.update(transaction);
+        notify(transaction);
+
+        //Facade
+        framework.processTransactions(transactions);
+        persistenceFacade.saveAccount(this);
+        persistenceFacade.saveTransaction(transaction);
     }
 
     @Override
