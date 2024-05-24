@@ -1,6 +1,7 @@
 package edu.mum.cs.cs525.labs.exercises.project.console.framework;
 
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.DTO.BankDTO;
+import edu.mum.cs.cs525.labs.exercises.project.console.framework.DTO.CardDTO;
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.model.Address;
 
 public class Application {
@@ -18,14 +19,20 @@ public class Application {
 
         accountService.deposit("1263862", 529);
         accountService.withdraw("1263862", 230);
+        a.generateReport();
+
+        System.out.println("**************************************");
         // use account 2;
-//        accountService.deposit("4253892", 12450);
+        CardDTO creditDTO = new CardDTO("Frank Brown", address, 300, "Silver", "20.05.1942", "4253892", "www.me@gmai.com");
+        Account a2 = accountService.createCreditAccount(creditDTO);
+
+        accountService.deposit("4253892", 12450);
 //        accountService.transferFunds("4253892", "1263862", 100, "payment of invoice 10232");
 //        // Custom Func
-//        accountService.addInterest();
-//        // show balances
+        a2.addInterest();
 
-        a.generateReport();
+//        // show balances
+        a2.generateReport();
 //
         for (Account account : accountService.getAllAccounts()) {
             Customer customer = account.getCustomer();

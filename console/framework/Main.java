@@ -111,6 +111,7 @@ public class Main {
         checkingPersonalAccount.generateReport();
 
 
+
 //        savingsCompanyAccount.deposit(1000);
 //        savingsCompanyAccount.addInterest();
 //        savingsCompanyAccount.generateReport();
@@ -120,6 +121,7 @@ public class Main {
 //        System.out.println(savingsCompanyAccount.getBalance());
         System.out.println("***********************************************");
 //        savingsCompanyAccount.withdraw(9000);
+
 
         // Check balances
         System.out.println("Checking Personal Account Balance: " + checkingPersonalAccount.getBalance() + " vvv  ");

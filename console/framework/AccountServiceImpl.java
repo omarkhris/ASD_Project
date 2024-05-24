@@ -40,8 +40,10 @@ public class AccountServiceImpl implements AccountService{
 
         if (bankDTO.getAccountType().equals("Ch")) {
             savingOrCheckingAccount = new CheckingAccountDecorator(bankAccount);
+            customer.addAccount(savingOrCheckingAccount);
         } else if (bankDTO.getAccountType().equals("S")) {
             savingOrCheckingAccount = new SavingsAccountDecorator(bankAccount);
+            customer.addAccount(savingOrCheckingAccount);
         }
 
         if(bankDTO.getBirthDate() != null)
@@ -71,12 +73,11 @@ public class AccountServiceImpl implements AccountService{
             factoryAccount = new SilverCreditCardFactory();
             creditCardAccount = factoryAccount.createAccount(bankDTO.getCcnumber(),bankDTO.getCreditCardLimit(),bankDTO.getAccountType(),customer, new HashMap<>());
         }
-
+        customer.addAccount(creditCardAccount);
         creditCardAccount.setAdditionalInfo("ccNumber", bankDTO.getCcnumber());
         creditCardAccount.setAdditionalInfo("expiryDate", bankDTO.getExpdate());
 
         accountDAO.saveAccount(creditCardAccount);
-
 
         return creditCardAccount;
 
@@ -120,7 +121,7 @@ public class AccountServiceImpl implements AccountService{
 //        Account toAccount = accountDAO.loadAccount(toAccountNumber);
 //        fromAccount.transferFunds(toAccount, amount, description);
 //        accountDAO.updateAccount(fromAccount);
-//        accountDAO.updateAccount(toAccount);
+//        accountcountDAO.updateAccount(toAccount);
     }
 
 //    @Override
