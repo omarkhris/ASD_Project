@@ -135,6 +135,22 @@ public class AccountServiceImpl implements AccountService{
 //        accountcountDAO.updateAccount(toAccount);
     }
 
+    @Override
+    public void generateAddInterests(Customer customer) {
+
+
+        for(Account account : this.getAllAccounts()) {
+            if(account.getCustomer().getName().equals(customer.getName())){
+                account.addInterest();
+            }
+        }
+
+
+        for(Account account : customer.getAccounts()){
+            account.addInterest();
+        }
+    }
+
 //    @Override
 //    public Account createCompanyAccount(String accountNumber, String customerName, String address, String email) {
 //        AccountFactory accountFactory = new BankingAccountFactory();

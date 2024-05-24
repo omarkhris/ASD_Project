@@ -15,4 +15,6 @@ public interface AccountService {
     void transferFunds(String fromAccountNumber, String toAccountNumber, double amount, String description);
 //    Account createCompanyAccount(String accountNumber, String customerName, String address, String email);
 //    //Account createCard(String cardNumber, String customerName, String address, String email);
+
+    void generateAddInterests(Customer customer);
 }
