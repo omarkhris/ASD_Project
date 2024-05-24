@@ -39,12 +39,4 @@ public class SavingsAccountDecorator extends AccountDecorator {
             ratioRate = balance * 0.03;
             super.updateBalance(- ratioRate);
     }
-
-    @Override
-    public Map<String, Object> generateReport() {
-        return null;
-//        for(Transaction tr : transactions){
-//            System.out.println(tr.getAmount());
-//        }
-    }
 }

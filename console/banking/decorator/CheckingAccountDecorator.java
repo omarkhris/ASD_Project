@@ -1,13 +1,9 @@
 package edu.mum.cs.cs525.labs.exercises.project.console.banking.decorator;
 
-import edu.mum.cs.cs525.labs.exercises.project.console.banking.BankingReportGenerator;
-import edu.mum.cs.cs525.labs.exercises.project.console.banking.decorator.AccountDecorator;
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.Account;
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.Transaction;
 
 import java.util.Date;
-
-import java.util.Map;
 
 public class CheckingAccountDecorator extends AccountDecorator {
     public CheckingAccountDecorator(Account decoratedAccount) {
@@ -63,11 +59,4 @@ public class CheckingAccountDecorator extends AccountDecorator {
             }
 
     }
-
-    @Override
-    public Map<String, Object> generateReport() {
-        return null;
-    }
-
-
 }

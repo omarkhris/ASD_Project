@@ -1,9 +1,12 @@
 package edu.mum.cs.cs525.labs.exercises.project.console.banking.decorator;
 
+import edu.mum.cs.cs525.labs.exercises.project.console.banking.BankingReportGenerator;
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.Account;
 import edu.mum.cs.cs525.labs.exercises.project.console.framework.Transaction;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class AccountDecorator extends Account {
     protected Account decoratedAccount;
@@ -58,5 +61,10 @@ public abstract class AccountDecorator extends Account {
     @Override
     public void addInterest() {
         decoratedAccount.addInterest();
+    }
+
+    @Override
+    public Map<String, Object> generateReport() {
+        return new BankingReportGenerator(transactions, accountNumber).generateReport();
     }
 }
